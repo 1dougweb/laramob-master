@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Sidebar Transitions */
+.sidebar-transition {
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Alpine.js cloak */
+[x-cloak] { 
+    display: none !important; 
+}
+
+/* Form components custom styles */
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    border-width: 1px;
+    border-color: #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    outline: none;
+    border-color: #6366f1;
+    ring-color: #6366f1;
+    ring-width: 2px;
+}
+
+.form-checkbox {
+    border-radius: 0.25rem;
+    border-color: #d1d5db;
+    color: #6366f1;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}

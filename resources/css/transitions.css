@@ -1,0 +1,46 @@
+/* Estilos para melhorar as transições entre páginas */
+
+/* Transições suaves para links e botões */
+a, button {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Transição para conteúdo da página */
+.js-enabled main {
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Efeito suave ao clicar em links */
+a:active, button:active {
+    transform: scale(0.98);
+}
+
+/* Impedir quebras de layout durante carregamento */
+.js-enabled body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Prevenir saltos durante transições */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Indicador de navegação */
+.navigation-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0;
+    background: #4f46e5;
+    z-index: 9999;
+    transition: width 0.3s ease-out;
+}
+
+/* Adicionar ao body quando navegando */
+body.navigating .navigation-indicator {
+    width: 100%;
+} 

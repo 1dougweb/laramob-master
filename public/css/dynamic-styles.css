@@ -1,0 +1,66 @@
+:root {
+  --primary-color: #ea5d00;
+  --primary-color-light: #ee7d33;
+  --primary-color-dark: #bb4a00;
+  --secondary-color: #1e40af;
+  --logo-bg-color: #0a1d33;
+  --sidebar-color: #0a1d33;
+  --icon-color: #ea5d00;
+  --text-color: #ffffff;
+  --hover-color: #152a41;
+  --hover-text-color: #ffffff;
+  --hover-icon-color: #ea5d00;
+  --hover-bg-color: #223c58;
+  --active-text-color: #ffffff;
+  --active-icon-color: #ea5d00;
+  --active-bg-color: #223c58;
+  --font-family: 'Figtree', sans-serif;
+  --border-radius: 0.375rem;
+}
+.btn, button[type='submit'], .button {
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+aside .flex.items-center.justify-between.p-6.bg-blue-700,
+aside .flex.items-center.justify-between.p-6[style*='background-color'] {
+  background-color: #0a1d33 !important;
+}
+aside nav a i, aside nav a svg, aside nav button svg, aside nav button i {
+  color: #ea5d00 !important;
+}
+aside nav a, aside nav a span:not(.mr-2), aside nav button, aside nav button span:not(.mr-2) {
+  color: #ffffff !important;
+}
+aside nav .text-gray-500, aside nav p.uppercase {
+  color: #b3b3b3 !important;
+}
+aside nav a:hover, aside nav button:hover {
+  background-color: #223c58 !important;
+}
+aside nav a:hover span:not(.mr-2), aside nav button:hover span:not(.mr-2) {
+  color: #ffffff !important;
+}
+aside nav a:hover i, aside nav a:hover svg, aside nav button:hover i, aside nav button:hover svg {
+  color: #ea5d00 !important;
+}
+aside nav a.bg-blue-100, aside nav .bg-blue-100 {
+  background-color: #223c58 !important;
+}
+aside nav a.bg-blue-100 span:not(.mr-2), aside nav .bg-blue-100 span:not(.mr-2) {
+  color: #ffffff !important;
+}
+aside nav a.bg-blue-100 i, aside nav a.bg-blue-100 svg, aside nav .bg-blue-100 i, aside nav .bg-blue-100 svg {
+  color: #ea5d00 !important;
+}
+aside nav .text-gray-700 {
+  color: #ffffff !important;
+}
+aside .hover\:bg-gray-100:hover {
+  background-color: #223c58 !important;
+}
+aside .hover\:text-gray-900:hover {
+  color: #ffffff !important;
+}
+aside {
+  background-color: #0a1d33 !important;
+}
