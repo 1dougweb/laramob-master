@@ -134,4 +134,38 @@ class PropertyController extends Controller
 
         return redirect()->back()->with('success', 'Your message has been sent successfully. We will contact you soon.');
     }
+
+    /**
+     * Search properties via AJAX
+     */
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+        
+        if (empty($query)) {
+            return response()->json([]);
+        }
+
+        $properties = Property::where('is_active', true)
+            ->where(function($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                  ->orWhere('description', 'like', "%{$query}%")
+                  ->orWhere('code', 'like', "%{$query}%")
+                  ->orWhere('address', 'like', "%{$query}%");
+            })
+            ->with(['propertyType', 'city', 'district'])
+            ->take(5)
+            ->get()
+            ->map(function($property) {
+                return [
+                    'id' => $property->id,
+                    'title' => $property->title,
+                    'address' => $property->address,
+                    'type' => $property->propertyType->name,
+                    'price' => $property->purpose === 'rent' ? $property->rental_price : $property->price
+                ];
+            });
+
+        return response()->json($properties);
+    }
 }

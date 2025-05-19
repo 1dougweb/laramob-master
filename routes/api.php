@@ -1,4 +1,8 @@
-<?php // Kanban Board API Routes
+<?php
+
+use Illuminate\Http\Request;
+
+// Kanban Board API Routes
 Route::middleware(['auth:sanctum'])->group(function () {
     // Task API Routes
     Route::get('/tasks', [App\Http\Controllers\Client\TaskController::class, 'getTasks']);
@@ -15,4 +19,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/meetings/{id}', [App\Http\Controllers\Client\MeetingController::class, 'update']);
     Route::put('/meetings/{id}/status', [App\Http\Controllers\Client\MeetingController::class, 'updateStatus']);
     Route::delete('/meetings/{id}', [App\Http\Controllers\Client\MeetingController::class, 'destroy']);
+});
+
+Route::get('/banks/search', function (Request $request) {
+    $query = $request->input('q');
+    return \App\Models\Bank::where('name', 'like', "%{$query}%")->orderBy('name')->get();
 }); 

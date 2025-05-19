@@ -178,7 +178,7 @@
                                             </div>
                                             <div class="ml-3">
                                                 <p class="text-sm text-blue-700">
-                                                    O sitemap.xml será gerado automaticamente e estará disponível em <span class="font-mono">https://seu-site.com/sitemap.xml</span>
+                                                    O sitemap.xml será gerado automaticamente e estará disponível em <span class="font-mono">{{ config('app.url') }}/sitemap.xml</span>
                                                 </p>
                                             </div>
                                         </div>

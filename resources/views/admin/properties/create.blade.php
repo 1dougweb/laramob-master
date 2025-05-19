@@ -192,7 +192,7 @@
                                                        x-model="feature.name" 
                                                        :name="`feature[${index}][feature_name]`" 
                                                        placeholder="Ex: Piscina, Jardim, Ar-condicionado"
-                                                       class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 feature-name-input">
+                                                       class="w-full py-3 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 feature-name-input">
                                             </div>
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Ícone') }}</label>

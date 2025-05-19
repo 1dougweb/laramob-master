@@ -7,6 +7,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -98,6 +99,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::patch('/kanban/meetings/{meeting}/status', [App\Http\Controllers\Admin\MeetingController::class, 'updateMeetingStatus'])->name('kanban.meetings.update-status');
 
     // Blog management routes
+    Route::get('/blog', [App\Http\Controllers\Admin\BlogController::class, 'index'])->name('blog.index');
     Route::resource('blog-categories', \App\Http\Controllers\Admin\BlogCategoryController::class);
     Route::post('blog-categories/reorder', [\App\Http\Controllers\Admin\BlogCategoryController::class, 'reorder'])->name('blog-categories.reorder');
     
@@ -152,5 +154,14 @@ Route::prefix('blog')->name('blog.')->group(function () {
     Route::post('/{id}/comment', [App\Http\Controllers\BlogController::class, 'storeComment'])->name('comment.store');
 });
 
-// Rota para estilos dinâmicos (acessível sem autenticação)
-Route::get('/dynamic-styles.css', [\App\Http\Controllers\Admin\SettingsController::class, 'dynamicStyles'])->name('dynamic.styles');
+// Rota para CSS dinâmico baseado nas configurações de estilo
+Route::get('/css/dynamic-styles.css', [App\Http\Controllers\DynamicStylesController::class, 'getCss'])->name('dynamic.styles');
+
+Route::get('/api/banks/search', function (Request $request) {
+    $query = $request->input('q');
+    $results = \App\Models\Bank::where('name', 'like', "%{$query}%")->orderBy('name')->get();
+    return $results;
+});
+
+// Property search API route
+Route::get('/api/properties/search', [PropertyController::class, 'search'])->name('api.properties.search');

@@ -13,18 +13,15 @@ return new class extends Migration
     {
         Schema::create('blog_posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->unsignedBigInteger('blog_category_id')->nullable();
             $table->string('title');
             $table->string('slug')->unique();
+            $table->text('content');
             $table->text('summary')->nullable();
-            $table->longText('content');
             $table->string('featured_image')->nullable();
-            $table->string('status')->default('draft'); // draft, published, archived
-            $table->boolean('is_featured')->default(false);
-            $table->boolean('allow_comments')->default(true);
-            $table->integer('view_count')->default(0);
+            $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();
+            $table->integer('view_count')->default(0);
+            $table->boolean('is_featured')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -37,4 +34,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('blog_posts');
     }
-};
+}; 

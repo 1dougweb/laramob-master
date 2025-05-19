@@ -6,13 +6,33 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'LaraMob') }}</title>
-
+        <!-- Flaticon CSS -->
+        <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+        <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+        <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+        <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-thin-rounded/css/uicons-thin-rounded.css'>
+        <!-- FontAwesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/css/custom.css', 'resources/js/app.js'])
+        <!-- Dynamic Styles based on settings -->
+        <link rel="stylesheet" href="{{ route('dynamic.styles') }}">
+        <style>
+            body, .font-sans {
+                font-family: var(--font-family, 'Figtree', sans-serif);
+            }
+            .bg-primary { background: var(--primary-color) !important; }
+            .text-primary { color: var(--primary-color) !important; }
+            .bg-secondary { background: var(--secondary-color) !important; }
+            .text-secondary { color: var(--secondary-color) !important; }
+            .rounded-main { border-radius: var(--border-radius, 0.375rem) !important; }
+            .btn-main { background: var(--primary-color); color: #fff; border-radius: var(--border-radius, 0.375rem); transition: background 0.2s; }
+            .btn-main:hover { background: var(--primary-color-dark); }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">

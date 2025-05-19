@@ -369,6 +369,14 @@
                                         Contatos
                                     </a>
                                     
+                                    <!-- Blog Link -->
+                                    <a href="{{ route('admin.blog.index') }}" class="block px-4 py-2 hover:bg-blue-100 {{ request()->routeIs('admin.blog.*') ? 'bg-blue-100' : '' }}">
+                                        <span class="mr-2">
+                                        <i class="fi fi-rr-document-signed"></i>
+                                        </span>
+                                        Blog
+                                    </a>
+                                    
                                     <div class="px-4 mb-3 mt-6">
                                         <p class="text-gray-500 uppercase text-xs font-semibold">Business</p>
                                     </div>

@@ -95,20 +95,16 @@
                                     <!-- Telefone -->
                                     <div>
                                         <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
-                                        <input type="text" name="phone" id="phone" value="{{ old('phone') }}" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md phone-mask">
+                                        <input type="text" name="phone" id="phone" value="{{ old('phone') }}" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md phone-mask" placeholder="(00) 0000-0000">
                                     </div>
 
                                     <!-- WhatsApp -->
                                     <div>
                                         <label for="mobile" class="block text-sm font-medium text-gray-700 mb-1">WhatsApp</label>
                                         <div class="mt-1 flex rounded-md shadow-sm">
-                                            <div class="relative flex items-stretch flex-grow">
-                                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-4 h-4 text-gray-400">
-                                                        <path fill="currentColor" d="M224 122.8c-72.7 0-131.8 59.1-131.9 131.8 0 24.9 7 49.2 20.2 70.1l3.1 5-13.3 48.6 49.9-13.1 4.8 2.9c20.2 12 43.4 18.4 67.1 18.4h.1c72.6 0 133.3-59.1 133.3-131.8 0-35.2-15.2-68.3-40.1-93.2-25-25-58-38.7-93.2-38.7zm77.5 188.4c-3.3 9.3-19.1 17.7-26.7 18.8-12.6 1.9-22.4.9-47.5-9.9-39.7-17.2-65.7-57.2-67.7-59.8-2-2.6-16.2-21.5-16.2-41s10.2-29.1 13.9-33.1c3.6-4 7.9-5 10.6-5 2.6 0 5.3 0 7.6.1 2.4.1 5.7-.9 8.9 6.8 3.3 7.9 11.2 27.4 12.2 29.4s1.7 4.3.3 6.9c-7.6 15.2-15.7 14.6-11.6 21.6 15.3 26.3 30.6 35.4 53.9 47.1 4 2 6.3 1.7 8.6-1 2.3-2.6 9.9-11.6 12.5-15.5 2.6-4 5.3-3.3 8.9-2 3.6 1.3 23.1 10.9 27.1 12.9s6.6 3 7.6 4.6c.9 1.9.9 9.9-2.4 19.1zM400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM224 456c-123.7 0-224-100.3-224-224S100.3 8 224 8s224 100.3 224 224-100.3 224-224 224z"/>
-                                                    </svg>
+                                            <div class="relative flex items-stretch flex-grow"> 
                                                 </div>
-                                                <input type="text" name="mobile" id="mobile" value="{{ old('mobile') }}" class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md phone-mask" placeholder="(00) 00000-0000">
+                                                <input type="text" name="mobile" id="mobile" value="{{ old('mobile') }}" class="focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md phone-mask" placeholder="(00) 00000-0000">
                                             </div>
                                         </div>
                                     </div>
@@ -237,7 +233,16 @@
                                     <!-- Banco -->
                                     <div>
                                         <label for="bank_name" class="block text-sm font-medium text-gray-700 mb-1">Banco</label>
-                                        <input type="text" name="bank_name" id="bank_name" value="{{ old('bank_name') }}" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        <div class="relative">
+                                            <input type="text" name="bank_name" id="bank_name" value="{{ old('bank_name') }}" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Pesquisar banco...">
+                                            <div id="bank_loading" class="absolute inset-y-0 right-0 flex items-center pr-3 hidden">
+                                                <svg class="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div id="bank_results" class="mt-1 border border-gray-300 rounded-md shadow-sm hidden"></div>
                                     </div>
 
                                     <!-- Agência -->
@@ -304,7 +309,6 @@
     <script src="https://cdn.jsdelivr.net/npm/imask@6.4.3/dist/imask.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Script carregado');
             // Mascaras para telefone
             document.querySelectorAll('.phone-mask').forEach(function(el) {
                 IMask(el, {
@@ -326,41 +330,32 @@
                 });
             });
 
-            // Máscara CPF/CNPJ - abordagem simplificada
+            // Máscara CPF/CNPJ - corrigida
             const documentInput = document.getElementById('document');
             const documentTypeSelect = document.getElementById('document_type');
             const documentLabel = document.getElementById('document_label');
-            let maskCPF, maskCNPJ;
-            
-            // Cria as duas máscaras
-            maskCPF = IMask(documentInput, {
-                mask: '000.000.000-00'
-            });
-            
-            // Função para trocar as máscaras
-            function updateMask() {
-                let type = documentTypeSelect.value;
-                
+            let documentMask;
+
+            function setDocumentMask(type) {
+                if (documentMask) documentMask.destroy();
                 if (type === 'cpf') {
                     documentLabel.textContent = 'CPF';
-                    maskCPF.updateOptions({
-                        mask: '000.000.000-00'
-                    });
-                    maskCPF.enable();
+                    documentInput.placeholder = 'CPF';
+                    documentMask = IMask(documentInput, { mask: '000.000.000-00' });
                 } else {
                     documentLabel.textContent = 'CNPJ';
-                    maskCPF.updateOptions({
-                        mask: '00.000.000/0000-00'
-                    });
-                    maskCPF.enable();
+                    documentInput.placeholder = 'CNPJ';
+                    documentMask = IMask(documentInput, { mask: '00.000.000/0000-00' });
                 }
             }
-            
+
             // Inicializa a máscara correta
-            updateMask();
-            
+            setDocumentMask(documentTypeSelect.value);
+
             // Listener para quando mudar o tipo
-            documentTypeSelect.addEventListener('change', updateMask);
+            documentTypeSelect.addEventListener('change', function() {
+                setDocumentMask(this.value);
+            });
 
             // Contador de caracteres para observações
             const notesField = document.getElementById('notes');
@@ -421,6 +416,57 @@
             if (selectedTypeRadio) {
                 selectedTypeRadio.dispatchEvent(new Event('change'));
             }
+
+            const bankInput = document.getElementById('bank_name');
+            const bankResults = document.getElementById('bank_results');
+            const bankLoading = document.getElementById('bank_loading');
+            let timeoutId;
+
+            bankInput.addEventListener('input', function() {
+                clearTimeout(timeoutId);
+                const query = this.value.trim();
+                if (query.length < 2) {
+                    bankResults.classList.add('hidden');
+                    bankLoading.classList.add('hidden');
+                    return;
+                }
+                bankLoading.classList.remove('hidden');
+                timeoutId = setTimeout(() => {
+                    fetch(`${window.location.origin}/api/banks/search?q=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            bankResults.innerHTML = '';
+                            if (data.length > 0) {
+                                data.forEach(bank => {
+                                    const div = document.createElement('div');
+                                    div.className = 'p-2 hover:bg-gray-100 cursor-pointer';
+                                    div.textContent = bank.name;
+                                    div.addEventListener('click', () => {
+                                        bankInput.value = bank.name;
+                                        bankResults.classList.add('hidden');
+                                    });
+                                    bankResults.appendChild(div);
+                                });
+                                bankResults.classList.remove('hidden');
+                            } else {
+                                bankResults.classList.add('hidden');
+                            }
+                            bankLoading.classList.add('hidden');
+                        })
+                        .catch(error => {
+                            console.error('Erro ao buscar bancos:', error);
+                            bankResults.classList.add('hidden');
+                            bankLoading.classList.add('hidden');
+                        });
+                }, 300);
+            });
+
+            // Fechar a lista ao clicar fora
+            document.addEventListener('click', function(event) {
+                if (!bankInput.contains(event.target) && !bankResults.contains(event.target)) {
+                    bankResults.classList.add('hidden');
+                }
+            });
         });
     </script>
     @endpush

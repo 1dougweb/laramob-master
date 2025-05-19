@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Property Types') }}
+                {{ __('Tipos de propiedades') }}
             </h2>
             <a href="{{ route('admin.property-types.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                {{ __('Add Property Type') }}
+                {{ __('Adicionar propriedade') }}
             </a>
         </div>
     </x-slot>
@@ -31,10 +31,10 @@
                             <thead class="bg-gray-100 text-gray-700">
                                 <tr>
                                     <th class="py-3 px-4 text-left">ID</th>
-                                    <th class="py-3 px-4 text-left">Name</th>
+                                    <th class="py-3 px-4 text-left">Nome</th>
                                     <th class="py-3 px-4 text-left">Status</th>
-                                    <th class="py-3 px-4 text-left">Properties</th>
-                                    <th class="py-3 px-4 text-left">Actions</th>
+                                    <th class="py-3 px-4 text-left">Propriedades</th>
+                                    <th class="py-3 px-4 text-left">Ações</th>
                                 </tr>
                             </thead>
                             <tbody class="text-gray-600">
@@ -77,7 +77,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="py-3 px-4 text-center">No property types found.</td>
+                                        <td colspan="5" class="py-3 px-4 text-center">Nenhum tipo de propriedade encontrado.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

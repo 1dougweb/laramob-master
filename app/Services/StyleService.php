@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use App\Services\SettingsService;
 
 class StyleService
 {
@@ -14,26 +15,38 @@ class StyleService
      */
     public function getStyles(): array
     {
-        $settings = $this->getSettings();
+        // Usar o SettingsService para obter as configurações
+        $settingsService = app(SettingsService::class);
+        $settings = $settingsService->getSettingsByGroup('style');
         
         return [
-            'primary_color' => $settings['primary_color'] ?? '#3b82f6',
+            'primary_color' => $settings['primary_color'] ?? '#ea5d00',
             'secondary_color' => $settings['secondary_color'] ?? '#1e40af',
+            'success_color' => $settings['success_color'] ?? '#10b981',
+            'danger_color' => $settings['danger_color'] ?? '#ef4444',
+            'warning_color' => $settings['warning_color'] ?? '#f59e0b',
+            'info_color' => $settings['info_color'] ?? '#3b82f6',
             'font_family' => $this->getFontFamily($settings['font_family'] ?? 'figtree'),
             'border_radius' => $this->getBorderRadius($settings['border_radius'] ?? 'default'),
             'sidebar_style' => $settings['sidebar_style'] ?? 'light',
             'sidebar_color' => $settings['sidebar_color'] ?? '#ffffff',
-            'logo_bg_color' => $settings['logo_bg_color'] ?? '#3b82f6',
-            'icon_color' => $settings['icon_color'] ?? '#4b5563',
+            'logo_bg_color' => $settings['logo_bg_color'] ?? '#0a1d33',
+            'icon_color' => $settings['icon_color'] ?? '#ea5d00',
             'text_color' => $settings['text_color'] ?? '#4b5563',
-            'hover_color' => $settings['hover_color'] ?? '#3b82f6',
-            'hover_text_color' => $settings['hover_text_color'] ?? '#3b82f6',
-            'hover_icon_color' => $settings['hover_icon_color'] ?? '#3b82f6',
+            'hover_color' => $settings['hover_color'] ?? '#ea5d00',
+            'hover_text_color' => $settings['hover_text_color'] ?? '#ea5d00',
+            'hover_icon_color' => $settings['hover_icon_color'] ?? '#ea5d00',
             'hover_bg_color' => $settings['hover_bg_color'] ?? '#ebf5ff',
-            'active_text_color' => $settings['active_text_color'] ?? '#3b82f6',
-            'active_icon_color' => $settings['active_icon_color'] ?? '#3b82f6',
+            'active_text_color' => $settings['active_text_color'] ?? '#ea5d00',
+            'active_icon_color' => $settings['active_icon_color'] ?? '#ea5d00',
             'active_bg_color' => $settings['active_bg_color'] ?? '#dbeafe',
             'button_style' => $settings['button_style'] ?? 'default',
+            'heading_color' => $settings['heading_color'] ?? '#4b5563',
+            'background_color' => $settings['background_color'] ?? '#f3f4f6',
+            'card_background' => $settings['card_background'] ?? '#ffffff',
+            'card_border_color' => $settings['card_border_color'] ?? '#e5e7eb',
+            'input_border_color' => $settings['input_border_color'] ?? '#d1d5db',
+            'input_focus_color' => $settings['input_focus_color'] ?? $settings['primary_color'] ?? '#ea5d00',
         ];
     }
     
@@ -51,6 +64,12 @@ class StyleService
         $css .= "  --primary-color-light: " . $this->lightenColor($styles['primary_color'], 0.2) . ";\n";
         $css .= "  --primary-color-dark: " . $this->darkenColor($styles['primary_color'], 0.2) . ";\n";
         $css .= "  --secondary-color: {$styles['secondary_color']};\n";
+        $css .= "  --secondary-color-light: " . $this->lightenColor($styles['secondary_color'], 0.2) . ";\n";
+        $css .= "  --secondary-color-dark: " . $this->darkenColor($styles['secondary_color'], 0.2) . ";\n";
+        $css .= "  --success-color: " . ($styles['success_color'] ? $styles['success_color'] : '#10b981') . ";\n";
+        $css .= "  --danger-color: " . ($styles['danger_color'] ? $styles['danger_color'] : '#ef4444') . ";\n";
+        $css .= "  --warning-color: " . ($styles['warning_color'] ? $styles['warning_color'] : '#f59e0b') . ";\n";
+        $css .= "  --info-color: " . ($styles['info_color'] ? $styles['info_color'] : '#3b82f6') . ";\n";
         $css .= "  --logo-bg-color: {$styles['logo_bg_color']};\n";
         $css .= "  --sidebar-color: {$styles['sidebar_color']};\n";
         $css .= "  --icon-color: {$styles['icon_color']};\n";
@@ -64,6 +83,12 @@ class StyleService
         $css .= "  --active-bg-color: {$styles['active_bg_color']};\n";
         $css .= "  --font-family: {$styles['font_family']};\n";
         $css .= "  --border-radius: {$styles['border_radius']};\n";
+        $css .= "  --heading-color: " . (isset($styles['heading_color']) ? $styles['heading_color'] : $styles['text_color']) . ";\n";
+        $css .= "  --background-color: " . (isset($styles['background_color']) ? $styles['background_color'] : '#f3f4f6') . ";\n";
+        $css .= "  --card-background: " . (isset($styles['card_background']) ? $styles['card_background'] : '#ffffff') . ";\n";
+        $css .= "  --card-border-color: " . (isset($styles['card_border_color']) ? $styles['card_border_color'] : '#e5e7eb') . ";\n";
+        $css .= "  --input-border-color: " . (isset($styles['input_border_color']) ? $styles['input_border_color'] : '#d1d5db') . ";\n";
+        $css .= "  --input-focus-color: " . (isset($styles['input_focus_color']) ? $styles['input_focus_color'] : $styles['primary_color']) . ";\n";
         $css .= "}\n";
         
         // Button styles
@@ -85,6 +110,9 @@ class StyleService
             $styles['active_icon_color'],
             $styles['active_bg_color']
         );
+        
+        // Frontend specific styles
+        $css .= $this->generateFrontendStyles($styles);
         
         return $css;
     }
@@ -368,48 +396,56 @@ class StyleService
     }
     
     /**
-     * Get settings from cache or storage
+     * Generate frontend-specific styles
      *
-     * @return array
+     * @param array $styles
+     * @return string
      */
-    private function getSettings(): array
+    private function generateFrontendStyles(array $styles): string
     {
-        // Try to get from cache first
-        if (Cache::has('app_settings')) {
-            return Cache::get('app_settings');
-        }
+        $css = "\n/* Frontend-specific styles */\n";
         
-        // If not in cache, get from file
-        if (Storage::exists('settings.json')) {
-            $settings = json_decode(Storage::get('settings.json'), true);
-            
-            // Store in cache
-            Cache::put('app_settings', $settings, now()->addDay());
-            
-            return $settings;
-        }
+        // Button classes
+        $css .= ".btn-primary {\n";
+        $css .= "  background-color: var(--primary-color);\n";
+        $css .= "  color: white;\n";
+        $css .= "  border-radius: var(--border-radius);\n";
+        $css .= "  transition: background-color 0.2s;\n";
+        $css .= "}\n";
         
-        // Return defaults if no settings found
-        return [
-            'primary_color' => '#3b82f6',
-            'secondary_color' => '#1e40af',
-            'success_color' => '#10b981',
-            'danger_color' => '#ef4444',
-            'font_family' => 'figtree',
-            'border_radius' => 'default',
-            'sidebar_style' => 'light',
-            'sidebar_color' => '#ffffff',
-            'logo_bg_color' => '#3b82f6',
-            'icon_color' => '#4b5563',
-            'text_color' => '#4b5563',
-            'hover_color' => '#3b82f6',
-            'hover_text_color' => '#3b82f6',
-            'hover_icon_color' => '#3b82f6',
-            'hover_bg_color' => '#ebf5ff',
-            'active_text_color' => '#3b82f6',
-            'active_icon_color' => '#3b82f6',
-            'active_bg_color' => '#dbeafe',
-            'button_style' => 'default',
-        ];
+        $css .= ".btn-primary:hover {\n";
+        $css .= "  background-color: var(--primary-color-dark);\n";
+        $css .= "}\n";
+        
+        $css .= ".btn-secondary {\n";
+        $css .= "  background-color: var(--secondary-color);\n";
+        $css .= "  color: white;\n";
+        $css .= "  border-radius: var(--border-radius);\n";
+        $css .= "  transition: background-color 0.2s;\n";
+        $css .= "}\n";
+        
+        $css .= ".btn-secondary:hover {\n";
+        $css .= "  background-color: var(--secondary-color-dark);\n";
+        $css .= "}\n";
+        
+        // Card styles
+        $css .= ".card {\n";
+        $css .= "  background-color: var(--card-background);\n";
+        $css .= "  border: 1px solid var(--card-border-color);\n";
+        $css .= "  border-radius: var(--border-radius);\n";
+        $css .= "}\n";
+        
+        // Form input styles
+        $css .= "input[type='text'], input[type='email'], input[type='password'], textarea, select {\n";
+        $css .= "  border-color: var(--input-border-color);\n";
+        $css .= "  border-radius: var(--border-radius);\n";
+        $css .= "}\n";
+        
+        $css .= "input[type='text']:focus, input[type='email']:focus, input[type='password']:focus, textarea:focus, select:focus {\n";
+        $css .= "  border-color: var(--input-focus-color);\n";
+        $css .= "  box-shadow: 0 0 0 3px " . $this->lightenColor($styles['primary_color'], 0.8) . ";\n";
+        $css .= "}\n";
+        
+        return $css;
     }
 } 

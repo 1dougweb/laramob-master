@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum('type', ['client', 'owner', 'both'])->default('client');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->text('notes')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }

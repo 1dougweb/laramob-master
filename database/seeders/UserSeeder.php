@@ -14,20 +14,25 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create admin user
-        $user = User::create([
-            'name' => 'Admin',
-            'email' => 'admin@laramob.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-        ]);
+        // Check if admin user already exists
+        $user = User::where('email', 'admin@laramob.com')->first();
 
-        // Create person record for admin
-        Person::create([
-            'name' => 'Admin User',
-            'email' => 'admin@laramob.com',
-            'user_id' => $user->id,
-            'type' => 'employee',
-        ]);
+        if (!$user) {
+            // Create admin user
+            $user = User::create([
+                'name' => 'Admin',
+                'email' => 'admin@laramob.com',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+            ]);
+
+            // Create person record for admin
+            Person::create([
+                'name' => 'Admin User',
+                'email' => 'admin@laramob.com',
+                'user_id' => $user->id,
+                'type' => 'both',
+            ]);
+        }
     }
 }

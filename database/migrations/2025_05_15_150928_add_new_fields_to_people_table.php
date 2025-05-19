@@ -47,7 +47,7 @@ return new class extends Migration
             }
             
             if (!Schema::hasColumn('people', 'broker_id')) {
-                $table->foreignId('broker_id')->nullable()->after('user_id')
+                $table->foreignId('broker_id')->nullable()->after('pix_key')
                       ->references('id')->on('people')
                       ->onDelete('set null');
             }

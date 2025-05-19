@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->softDeletes();
+        Schema::create('banks', function (Blueprint $table) {
+            $table->id();
+            $table->string('code', 3)->unique();
+            $table->string('name');
+            $table->string('ispb', 8)->unique();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
+        Schema::dropIfExists('banks');
     }
 };
